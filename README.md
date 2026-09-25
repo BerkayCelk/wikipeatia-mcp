@@ -63,6 +63,50 @@ claude mcp add wikipeatia -- uvx --from git+https://github.com/BerkayCelk/wikipe
 
 Ready-made config files live in [`examples/`](examples/).
 
+## For AI agents (automated setup)
+
+Written so an AI coding agent (Claude Code, Codex, Cursor, Hermes, ...) can install and verify this server on its own.
+
+**1. Install command (no clone needed):**
+
+```bash
+uvx --from git+https://github.com/BerkayCelk/wikipeatia-mcp wikipeatia-mcp
+```
+
+**2. Register with a client:**
+
+- **Claude Code:**
+  ```bash
+  claude mcp add wikipeatia -- uvx --from git+https://github.com/BerkayCelk/wikipeatia-mcp wikipeatia-mcp
+  ```
+- **Claude Desktop** -- merge into `claude_desktop_config.json` (`~/Library/Application Support/Claude/` on macOS, `%APPDATA%\Claude\` on Windows, `~/.config/Claude/` on Linux):
+  ```json
+  {"mcpServers": {"wikipeatia": {"command": "uvx", "args": ["--from", "git+https://github.com/BerkayCelk/wikipeatia-mcp", "wikipeatia-mcp"]}}}
+  ```
+- **Cursor** -- same JSON in `~/.cursor/mcp.json` (project scope: `.cursor/mcp.json`).
+- **Hermes** -- see [`examples/hermes_config.yaml`](examples/hermes_config.yaml).
+- **Any other MCP client** -- register this stdio command:
+  `uvx --from git+https://github.com/BerkayCelk/wikipeatia-mcp wikipeatia-mcp`
+
+**3. Verify (no client needed):**
+
+```bash
+printf '%s\n' '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"probe","version":"0"}}}' | uvx --from git+https://github.com/BerkayCelk/wikipeatia-mcp wikipeatia-mcp | head -c 400
+```
+
+Expect JSON containing `"serverInfo":{"name":"wikipeatia"`.
+
+**4. Usage notes for agents:**
+
+- Research questions -> `corpus_search` / `corpus_semantic_search` (hybrid search over the full corpus).
+- Quick answer -> `corpus_ask`; deep multi-source synthesis (30-120 s) -> `corpus_deep_ask`.
+- Scope a search with `doc_type`, `author`, `series`; `ray_only=false` includes all authors (Georgi Dinkov, Danny Roddy, ...).
+- Read-only, no API keys; avoid tight request loops (the upstream API rate-limits bursts).
+
+**5. Copy-paste prompt for users:**
+
+> Set up the WikiPeatia MCP server for me: register `uvx --from git+https://github.com/BerkayCelk/wikipeatia-mcp wikipeatia-mcp` as a stdio MCP server named `wikipeatia` in my client config, restart/reload the client, then verify by calling the `corpus_health` tool.
+
 ## Tools (32)
 
 ### Wiki (17)
