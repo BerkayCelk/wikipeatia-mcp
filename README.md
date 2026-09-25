@@ -11,6 +11,8 @@ An [MCP](https://modelcontextprotocol.io) server that gives AI assistants access
 
 **32 tools · no API keys · read-only · works with any MCP client** (Claude Desktop, Claude Code, Cursor, Windsurf, Hermes, ...).
 
+**The server itself is a single Python file: [`server.py`](server.py)** (FastMCP over stdio, ~1,000 lines). Everything else in this repo is documentation, packaging and tests.
+
 ## What it gives your assistant
 
 - **Search the entire Ray Peat corpus** (~7,000 documents / ~220,000 text chunks): articles, books, interviews (audio transcripts), newsletters, forum posts, email Q&A and wiki pages.
